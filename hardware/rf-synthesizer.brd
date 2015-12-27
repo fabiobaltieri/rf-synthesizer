@@ -140,7 +140,7 @@
 </layers>
 <board>
 <plain>
-<text x="33.6804" y="5.6388" size="1.778" layer="121">FB2015</text>
+<text x="33.6804" y="5.6388" size="1.778" layer="121">FB2016</text>
 <text x="19.05" y="27.1272" size="1.27" layer="121">rf-synthesizer r0</text>
 </plain>
 <libraries>
@@ -1028,7 +1028,7 @@ OSH Park compatible</description>
 <via x="16.4592" y="22.5552" extent="1-16" drill="0.3302"/>
 <via x="11.2776" y="23.0124" extent="1-16" drill="0.3302"/>
 <via x="12.0396" y="21.1836" extent="1-16" drill="0.3302"/>
-<via x="19.9644" y="3.81" extent="1-16" drill="0.3302"/>
+<via x="20.1168" y="3.6576" extent="1-16" drill="0.3302"/>
 <via x="9.144" y="4.1148" extent="1-16" drill="0.3302"/>
 <via x="38.5572" y="17.8308" extent="1-16" drill="0.3302"/>
 <via x="35.3568" y="21.336" extent="1-16" drill="0.3302"/>
@@ -1039,6 +1039,17 @@ OSH Park compatible</description>
 <via x="29.2608" y="26.3652" extent="1-16" drill="0.3302"/>
 <via x="29.2608" y="25.146" extent="1-16" drill="0.3302"/>
 <via x="30.1752" y="24.9936" extent="1-16" drill="0.3302"/>
+<wire x1="24.0302" y1="15.8376" x2="23.0244" y2="15.8376" width="0.254" layer="1"/>
+<wire x1="23.0244" y1="15.8376" x2="22.2504" y2="16.6116" width="0.254" layer="1"/>
+<wire x1="22.2504" y1="16.6116" x2="22.2504" y2="16.764" width="0.254" layer="1"/>
+<wire x1="27.6152" y1="17.4226" x2="27.6152" y2="18.014" width="0.254" layer="1"/>
+<wire x1="27.6152" y1="18.014" x2="27.8892" y2="18.288" width="0.254" layer="1"/>
+<wire x1="27.8892" y1="18.288" x2="28.2065" y2="18.288" width="0.254" layer="1"/>
+<wire x1="28.2065" y1="18.288" x2="28.9685" y2="19.05" width="0.254" layer="1"/>
+<wire x1="14.286521875" y1="10.372875" x2="14.7828" y2="10.869153125" width="0.254" layer="1"/>
+<wire x1="14.7828" y1="10.869153125" x2="14.7828" y2="12.4968" width="0.254" layer="1"/>
+<via x="10.8204" y="21.7932" extent="1-16" drill="0.3302"/>
+<via x="17.0688" y="1.9812" extent="1-16" drill="0.3302"/>
 </signal>
 <signal name="+5V">
 <contactref element="JP10" pad="VBUS"/>
@@ -1081,10 +1092,9 @@ OSH Park compatible</description>
 <wire x1="10.8204" y1="1.3716" x2="17.8308" y2="1.3716" width="0.1524" layer="16"/>
 <wire x1="17.8308" y1="1.3716" x2="18.288" y2="1.8288" width="0.1524" layer="16"/>
 <via x="18.288" y="1.8288" extent="1-16" drill="0.3302"/>
-<wire x1="18.288" y1="1.8288" x2="20.1168" y2="1.8288" width="0.1524" layer="1"/>
-<via x="20.1168" y="1.8288" extent="1-16" drill="0.3302"/>
-<wire x1="20.1168" y1="1.8288" x2="20.8788" y2="1.0668" width="0.1524" layer="1"/>
-<wire x1="20.8788" y1="1.0668" x2="26.0604" y2="1.0668" width="0.1524" layer="1"/>
+<wire x1="18.288" y1="1.8288" x2="20.7264" y2="1.8288" width="0.1524" layer="1"/>
+<wire x1="20.7264" y1="1.8288" x2="21.4884" y2="1.0668" width="0.1524" layer="1"/>
+<wire x1="21.4884" y1="1.0668" x2="26.0604" y2="1.0668" width="0.1524" layer="1"/>
 <wire x1="26.0604" y1="1.0668" x2="27.0764" y2="2.0828" width="0.1524" layer="1"/>
 </signal>
 <signal name="+3V3">
@@ -1201,7 +1211,7 @@ OSH Park compatible</description>
 <wire x1="8.2296" y1="0.762" x2="18.7452" y2="0.762" width="0.6096" layer="16"/>
 <wire x1="18.7452" y1="0.762" x2="19.2024" y2="1.2192" width="0.6096" layer="16"/>
 <wire x1="19.2024" y1="1.2192" x2="19.6596" y2="0.762" width="0.6096" layer="16"/>
-<wire x1="19.2024" y1="11.2776" x2="19.2024" y2="9.144" width="0.6096" layer="16"/>
+<wire x1="19.2024" y1="10.8204" x2="19.2024" y2="9.144" width="0.6096" layer="16"/>
 <wire x1="19.2024" y1="9.144" x2="19.2024" y2="6.5532" width="0.6096" layer="16"/>
 <wire x1="19.2024" y1="6.5532" x2="18.8976" y2="6.2484" width="0.6096" layer="16"/>
 <wire x1="18.8976" y1="6.2484" x2="19.2024" y2="5.9436" width="0.6096" layer="16"/>
@@ -1244,9 +1254,9 @@ OSH Park compatible</description>
 <wire x1="29.1084" y1="4.1273" x2="29.1084" y2="5.0292" width="0.1524" layer="1"/>
 <via x="29.1084" y="5.0292" extent="1-16" drill="0.3302"/>
 <wire x1="28.6512" y1="5.0292" x2="29.1084" y2="5.0292" width="0.6096" layer="16"/>
-<wire x1="21.9456" y1="12.8141" x2="20.7389" y2="12.8141" width="0.6096" layer="1"/>
-<wire x1="20.7389" y1="12.8141" x2="19.2024" y2="11.2776" width="0.6096" layer="1"/>
-<via x="19.2024" y="11.2776" extent="1-16" drill="0.3302"/>
+<wire x1="21.9456" y1="12.8141" x2="21.1961" y2="12.8141" width="0.6096" layer="1"/>
+<wire x1="21.1961" y1="12.8141" x2="19.2024" y2="10.8204" width="0.6096" layer="1"/>
+<via x="19.2024" y="10.8204" extent="1-16" drill="0.3302"/>
 <wire x1="16.6116" y1="10.5031" x2="17.9707" y2="9.144" width="0.6096" layer="1"/>
 <via x="19.2024" y="9.144" extent="1-16" drill="0.3302"/>
 <wire x1="17.9707" y1="9.144" x2="19.2024" y2="9.144" width="0.6096" layer="1"/>
@@ -1266,9 +1276,8 @@ OSH Park compatible</description>
 <wire x1="13.1064" y1="19.6596" x2="13.716" y2="20.2692" width="0.6096" layer="16"/>
 <wire x1="13.716" y1="20.2692" x2="13.716" y2="22.7076" width="0.6096" layer="16"/>
 <wire x1="13.716" y1="22.7076" x2="14.478" y2="23.4696" width="0.6096" layer="16"/>
-<wire x1="32.3088" y1="18.7452" x2="32.3088" y2="25.2984" width="0.6096" layer="16"/>
-<wire x1="32.3088" y1="25.2984" x2="29.4132" y2="28.194" width="0.6096" layer="16"/>
-<wire x1="29.4132" y1="28.194" x2="24.384" y2="28.194" width="0.6096" layer="16"/>
+<wire x1="32.3088" y1="18.7452" x2="32.3088" y2="26.9748" width="0.6096" layer="16"/>
+<wire x1="31.0896" y1="28.194" x2="24.384" y2="28.194" width="0.6096" layer="16"/>
 <wire x1="7.0229" y1="16.3068" x2="7.0104" y2="16.3193" width="0.1524" layer="1"/>
 <wire x1="7.0104" y1="16.3193" x2="7.0104" y2="17.2212" width="0.1524" layer="1"/>
 <via x="7.0104" y="17.2212" extent="1-16" drill="0.3302"/>
@@ -1280,6 +1289,7 @@ OSH Park compatible</description>
 <wire x1="8.6868" y1="19.3548" x2="8.6868" y2="18.4404" width="0.6096" layer="16"/>
 <wire x1="8.6868" y1="18.4404" x2="8.0772" y2="17.8308" width="0.6096" layer="16"/>
 <wire x1="8.0772" y1="17.8308" x2="7.3152" y2="17.8308" width="0.6096" layer="16"/>
+<wire x1="31.0896" y1="28.194" x2="32.3088" y2="26.9748" width="0.6096" layer="16"/>
 </signal>
 <signal name="N$1">
 <contactref element="JP10" pad="D+"/>
@@ -1504,9 +1514,9 @@ OSH Park compatible</description>
 <wire x1="27.7368" y1="21.4884" x2="26.3652" y2="21.4884" width="0.1524" layer="16"/>
 <wire x1="26.3652" y1="21.4884" x2="26.0604" y2="21.1836" width="0.1524" layer="16"/>
 <wire x1="26.0604" y1="21.1836" x2="26.0604" y2="17.6784" width="0.1524" layer="16"/>
-<wire x1="26.0604" y1="17.6784" x2="24.5364" y2="16.1544" width="0.1524" layer="16"/>
-<wire x1="24.5364" y1="16.1544" x2="24.5364" y2="13.2588" width="0.1524" layer="16"/>
-<wire x1="24.5364" y1="13.2588" x2="25.908" y2="11.8872" width="0.1524" layer="16"/>
+<wire x1="26.0604" y1="17.6784" x2="24.6888" y2="16.3068" width="0.1524" layer="16"/>
+<wire x1="24.6888" y1="16.3068" x2="24.6888" y2="13.1064" width="0.1524" layer="16"/>
+<wire x1="24.6888" y1="13.1064" x2="25.908" y2="11.8872" width="0.1524" layer="16"/>
 <wire x1="25.908" y1="11.8872" x2="26.5176" y2="11.8872" width="0.1524" layer="16"/>
 </signal>
 <signal name="CPOUT">
@@ -1523,9 +1533,9 @@ OSH Park compatible</description>
 <wire x1="26.6575" y1="25.146" x2="25.7556" y2="25.146" width="0.254" layer="1"/>
 <via x="25.7556" y="25.146" extent="1-16" drill="0.3302"/>
 <wire x1="25.7556" y1="25.146" x2="25.7556" y2="17.8308" width="0.1524" layer="16"/>
-<wire x1="25.7556" y1="17.8308" x2="24.2316" y2="16.3068" width="0.1524" layer="16"/>
-<wire x1="24.2316" y1="16.3068" x2="24.2316" y2="13.1064" width="0.1524" layer="16"/>
-<wire x1="24.2316" y1="13.1064" x2="26.0604" y2="11.2776" width="0.1524" layer="16"/>
+<wire x1="25.7556" y1="17.8308" x2="24.384" y2="16.4592" width="0.1524" layer="16"/>
+<wire x1="24.384" y1="16.4592" x2="24.384" y2="12.954" width="0.1524" layer="16"/>
+<wire x1="24.384" y1="12.954" x2="26.0604" y2="11.2776" width="0.1524" layer="16"/>
 <wire x1="26.0604" y1="11.2776" x2="27.1272" y2="11.2776" width="0.1524" layer="16"/>
 <wire x1="27.1272" y1="11.2776" x2="27.7368" y2="11.8872" width="0.1524" layer="16"/>
 </signal>
@@ -1654,23 +1664,27 @@ OSH Park compatible</description>
 </signal>
 </signals>
 <errors>
-<approved hash="5,1,0ce87c4e45ead989"/>
 <approved hash="5,1,2153795713325630"/>
+<approved hash="5,1,0ce87c4e45ead989"/>
 <approved hash="19,1,495b061ad1e2aea1"/>
-<approved hash="19,1,eed9d79e00320977"/>
 <approved hash="19,1,e4bcd084dca0e898"/>
+<approved hash="19,1,eed9d79e00320977"/>
 <approved hash="19,1,656c515453d467ec"/>
-<approved hash="19,1,032a1b1219100128"/>
 <approved hash="19,1,1cea04d200a01898"/>
 <approved hash="19,1,1d6e055607a81f90"/>
+<approved hash="19,1,032a1b1219100128"/>
 <approved hash="19,1,756c49544bd477ec"/>
 <approved hash="5,1,c33722c38e299d01"/>
-<approved hash="19,1,0565c55dc7d807e0"/>
+<approved hash="5,1,3631ad4443ba2820"/>
+<approved hash="5,1,85d32f4b43771f43"/>
+<approved hash="5,1,079c972879661987"/>
+<approved hash="5,1,be702939451921ec"/>
 <approved hash="19,1,1b3ddb05d9681950"/>
 <approved hash="19,1,04e5c4ddc0d800e0"/>
-<approved hash="19,1,15640d5c0f201718"/>
-<approved hash="19,1,14e40cdc08201018"/>
+<approved hash="19,1,0565c55dc7d807e0"/>
 <approved hash="19,1,0b3c1304119009a8"/>
+<approved hash="19,1,14e40cdc08201018"/>
+<approved hash="19,1,15640d5c0f201718"/>
 <approved hash="19,1,d564cd5ccfd8d7e0"/>
 <approved hash="19,1,d4e4ccdcc8d8d0e0"/>
 <approved hash="19,1,cb3cd304d168c950"/>
