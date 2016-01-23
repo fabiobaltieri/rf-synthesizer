@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.3.0">
+<eagle version="7.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="yes"/>
@@ -4441,6 +4441,7 @@ DIN A3, landscape with extra doc field</description>
 <wire x1="137.16" y1="180.34" x2="137.16" y2="139.7" width="0.1524" layer="97"/>
 <text x="71.12" y="101.6" size="1.778" layer="97">Total current up to ~150mA</text>
 <text x="88.9" y="248.92" size="1.778" layer="97">Pmax=~1W @25deg, Tja=93deg</text>
+<text x="144.78" y="73.66" size="1.778" layer="97">470//1k5</text>
 </plain>
 <instances>
 <instance part="LICENSE1" gate="G$1" x="289.56" y="25.4"/>
