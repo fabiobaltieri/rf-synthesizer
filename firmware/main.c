@@ -44,6 +44,23 @@ usbMsgLen_t usbFunctionSetup(uint8_t data[8])
 	return 0;
 }
 
+static void io_init(void)
+{
+	ADF_PDBRF_DDR |= _BV(ADF_PDBRF);
+	adf_pdbrf_l();
+
+	ADF_CE_DDR |= _BV(ADF_CE);
+	adf_ce_h();
+}
+
+static void ld_poll(void)
+{
+	if (adf_ld())
+		led_b_on();
+	else
+		led_b_off();
+}
+
 static void hello(void)
 {
 	uint8_t i;
@@ -60,6 +77,7 @@ int __attribute__((noreturn)) main(void)
 	uint8_t i;
 
 	led_init();
+	io_init();
 
 	spi_init();
 
@@ -84,5 +102,6 @@ int __attribute__((noreturn)) main(void)
 	for (;;) {
 		wdt_reset();
 		usbPoll();
+		ld_poll();
 	}
 }
