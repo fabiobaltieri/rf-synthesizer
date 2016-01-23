@@ -10,7 +10,7 @@
 #     make flash   # to load the boot loader into flash
 #     make lock    # to protect the boot loader from overwriting
 
-DEVICE = atmega88p
+DEVICE = atmega88pa
 BOOTLOADER_ADDRESS = 1800
 F_CPU = 12000000
 FUSEH = 0xdd

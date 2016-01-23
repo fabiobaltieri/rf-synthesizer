@@ -12,7 +12,7 @@
 
 NAME = main
 
-MCU = atmega168
+MCU = atmega88pa
 F_CPU = 12000000UL
 
 LFUSE = 0xef
@@ -141,6 +141,6 @@ fuse:
 	$(AVRDUDE) $(AVRDUDEFLAGS) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m
 
 boot: $(NAME)_text.hex
-	../commandline/pm -R || true
+	../commandline/rfsynth -R || true
 	sleep 1
 	$(BOOTLOADER) $(BOOTLOADER_FLAGS) $(NAME)_text.hex
