@@ -101,11 +101,16 @@ static void dump(struct sample *samples, struct sample *reference, unsigned step
 static void usage(char *name)
 {
 	fprintf(stderr, "Usage: %s -h\n", name);
-	fprintf(stderr, "       %s -R\n", name);
 	fprintf(stderr, "       %s [options]\n", name);
 	fprintf(stderr, "options:\n"
-			"  -h            this help\n"
-			"TODO\n"
+			"  -h          this help\n"
+			"  -v          increase verbosity level\n"
+			"  -f freq     start frequency\n"
+			"  -t freq     stop frequency\n"
+			"  -s count    number of samples from start to stop\n"
+			"  -o filename output file for the samples\n"
+			"  -p          run gnuplot for every pass\n"
+			"  -n          perform an initial normalization\n"
 			);
 	exit(1);
 }
