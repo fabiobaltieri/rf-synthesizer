@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <endian.h>
 #include <math.h>
+#include <signal.h>
 
 #include <usb.h>
 
@@ -126,6 +127,12 @@ static void plot_refresh(FILE *gp, char *fname)
 	fflush(gp);
 }
 
+static void bailout(int signo)
+{
+	loop = 0;
+	signal(SIGINT, SIG_DFL);
+}
+
 int main(int argc, char **argv)
 {
 	int opt;
@@ -199,6 +206,7 @@ int main(int argc, char **argv)
 	}
 	plot_init(gp);
 
+	signal(SIGINT, bailout);
 	while (loop) {
 		sweep(samples, from, to, steps);
 		dump(samples, steps, outfile);
