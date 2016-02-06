@@ -2,7 +2,7 @@ USBFLAGS = `libusb-config --cflags`
 USBLIBS = `libusb-config --libs`
 
 BIN = rfsynth
-EXTRALIBS = ../commandline/librfsynth.a
+EXTRALIBS = ../commandline/librfsynth.a ../../rf-power-detector/commandline/librfpower.a
 
 OBJECTS = opendevice.o main.o
 

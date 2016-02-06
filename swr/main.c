@@ -16,11 +16,13 @@
 #include "../firmware/requests.h"
 #include "../firmware/adf4350.h"
 #include "../commandline/librfsynth.h"
+#include "../../rf-power-detector/commandline/librfpower.h"
 
 #define to_mhz_f(a) (a / 1000000.0)
 
 static int verbose = 0;
 static usb_dev_handle *rfsynth_handle = NULL;
+static usb_dev_handle *rfpower_handle = NULL;
 static struct adf_state st;
 static struct adf_config cfg;
 
@@ -35,6 +37,7 @@ static void sweep(unsigned long long start, unsigned long stop, unsigned steps)
 {
 	unsigned long freq;
 	unsigned int i;
+	float dbm;
 
 	printf("Sweep: %f MHz to %f MHz in %d steps\n",
 			to_mhz_f(start), to_mhz_f(stop), steps);
@@ -48,11 +51,13 @@ static void sweep(unsigned long long start, unsigned long stop, unsigned steps)
 		printf(", set");
 
 		do {
-			usleep(100000);
+			usleep(10000);
 		} while (!rfsynth_get_ld(rfsynth_handle));
 		printf(", lock");
 
-		// get power
+		dbm = rfpower_get_dbm(rfpower_handle);
+		printf(", dbm: %f", dbm);
+
 		printf("\n");
 	}
 
@@ -77,7 +82,6 @@ int main(int argc, char **argv)
 	unsigned long long from = 350000000;
 	unsigned long long to = 550000000;
 	unsigned int steps = 100;
-	unsigned int power = 3;
 
 	memset(&st, 0, sizeof(st));
 	memset(&cfg, 0, sizeof(cfg));
@@ -87,7 +91,7 @@ int main(int argc, char **argv)
 
 	usb_init();
 
-	while ((opt = getopt(argc, argv, "hvf:t:s:p:")) != -1) {
+	while ((opt = getopt(argc, argv, "hvf:t:s:")) != -1) {
 		switch (opt) {
 		case 'h':
 			usage(argv[0]);
@@ -104,9 +108,6 @@ int main(int argc, char **argv)
 		case 's':
 			steps = strtoll(optarg, NULL, 0);
 			break;
-		case 'p':
-			power = strtol(optarg, NULL, 0);
-			break;
 		default:
 			usage(argv[0]);
 		}
@@ -118,6 +119,12 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+	printf("Connecting to %s\n", RFPOWER_PRODUCT);
+	if (usbOpenDevice(&rfpower_handle, 0, NULL, 0, RFPOWER_PRODUCT, NULL, NULL, NULL) != 0) {
+		fprintf(stderr, "error: could not find USB device \"%s\"\n", RFPOWER_PRODUCT);
+		exit(1);
+	}
+
 	printf("Normalizing...\n");
 	sweep(from, to, steps);
 	printf("Sweeping...\n");
@@ -126,6 +133,7 @@ int main(int argc, char **argv)
 	cfg.flags &= ~ADF_RF_OUT_EN;
 	set_frequency(to);
 
+	usb_close(rfpower_handle);
 	usb_close(rfsynth_handle);
 
 	return 0;
