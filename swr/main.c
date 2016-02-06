@@ -18,6 +18,8 @@
 #include "../commandline/librfsynth.h"
 #include "../../rf-power-detector/commandline/librfpower.h"
 
+#define GNUPLOT "gnuplot"
+
 #define to_mhz_f(a) (a / 1000000.0)
 
 static int verbose = 0;
@@ -25,6 +27,12 @@ static usb_dev_handle *rfsynth_handle = NULL;
 static usb_dev_handle *rfpower_handle = NULL;
 static struct adf_state st;
 static struct adf_config cfg;
+static int loop = 1;
+
+struct sample {
+	float freq;
+	float power;
+};
 
 static void set_frequency(unsigned long long freq)
 {
@@ -33,7 +41,7 @@ static void set_frequency(unsigned long long freq)
 	rfsynth_send_config(rfsynth_handle, &cfg);
 }
 
-static void sweep(unsigned long long start, unsigned long stop, unsigned steps)
+static void sweep(struct sample *samples, unsigned long long start, unsigned long stop, unsigned steps)
 {
 	unsigned long freq;
 	unsigned int i;
@@ -45,22 +53,45 @@ static void sweep(unsigned long long start, unsigned long stop, unsigned steps)
 	for (i = 0; i < steps; i++) {
 		freq = start + (stop - start) * i / steps;
 
-		printf("sample: %f", to_mhz_f(freq));
+		printf("sample %4d/%4d: %f", i, steps, to_mhz_f(freq));
 
 		set_frequency(freq);
 		printf(", set");
 
 		do {
 			usleep(10000);
+			printf(", lock");
 		} while (!rfsynth_get_ld(rfsynth_handle));
-		printf(", lock");
 
 		dbm = rfpower_get_dbm(rfpower_handle);
 		printf(", dbm: %f", dbm);
 
-		printf("\n");
+		printf("\r");
+		fflush(stdout);
+
+		samples[i].freq = freq;
+		samples[i].power = dbm;
 	}
 
+	printf("\n");
+}
+
+static void dump(struct sample *samples, unsigned steps, char *fname)
+{
+	FILE *fd;
+	unsigned int i;
+
+	fd = fopen(fname, "w");
+	if (!fd) {
+		perror("cannot open the output file");
+		exit(1);
+	}
+
+	for (i = 0; i < steps; i++) {
+		fprintf(fd, "%f %f\n", samples[i].freq, samples[i].power);
+	}
+
+	fclose(fd);
 }
 
 static void usage(char *name)
@@ -75,6 +106,26 @@ static void usage(char *name)
 	exit(1);
 }
 
+static void plot_init(FILE *gp)
+{
+	if (!gp)
+		return;
+
+	fprintf(gp, "set title 'frequency vs power'\n");
+	fprintf(gp, "set xlabel 'frequency [Hz]'\n");
+	fprintf(gp, "set ylabel 'power [dBm]'\n");
+	fprintf(gp, "set format x '%%.0s%%c'\n");
+}
+
+static void plot_refresh(FILE *gp, char *fname)
+{
+	if (!gp)
+		return;
+
+	fprintf(gp, "plot '%s' with lines\n", fname);
+	fflush(gp);
+}
+
 int main(int argc, char **argv)
 {
 	int opt;
@@ -82,6 +133,11 @@ int main(int argc, char **argv)
 	unsigned long long from = 350000000;
 	unsigned long long to = 550000000;
 	unsigned int steps = 100;
+	char *outfile = "out.dat";
+	int plot = 0;
+	static FILE *gp = NULL;
+
+	struct sample *samples;
 
 	memset(&st, 0, sizeof(st));
 	memset(&cfg, 0, sizeof(cfg));
@@ -91,7 +147,7 @@ int main(int argc, char **argv)
 
 	usb_init();
 
-	while ((opt = getopt(argc, argv, "hvf:t:s:")) != -1) {
+	while ((opt = getopt(argc, argv, "hvf:t:s:o:p")) != -1) {
 		switch (opt) {
 		case 'h':
 			usage(argv[0]);
@@ -108,10 +164,18 @@ int main(int argc, char **argv)
 		case 's':
 			steps = strtoll(optarg, NULL, 0);
 			break;
+		case 'o':
+			outfile = optarg;
+			break;
+		case 'p':
+			plot = 1;
+			break;
 		default:
 			usage(argv[0]);
 		}
 	}
+
+	samples = calloc(steps, sizeof(struct sample));
 
 	printf("Connecting to %s\n", RFSYNTH_PRODUCT);
 	if (usbOpenDevice(&rfsynth_handle, 0, NULL, 0, RFSYNTH_PRODUCT, NULL, NULL, NULL) != 0) {
@@ -125,14 +189,30 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	printf("Normalizing...\n");
-	sweep(from, to, steps);
-	printf("Sweeping...\n");
+	if (plot) {
+		printf("Running %s...\n", GNUPLOT);
+		gp = popen(GNUPLOT, "w");
+		if (!gp) {
+			perror("cannot run gnuplot");
+			plot = 0;
+		}
+	}
+	plot_init(gp);
+
+	while (loop) {
+		sweep(samples, from, to, steps);
+		dump(samples, steps, outfile);
+		plot_refresh(gp, outfile);
+	}
 
 	printf("Disable the output...\n");
 	cfg.flags &= ~ADF_RF_OUT_EN;
 	set_frequency(to);
 
+	free(samples);
+
+	if (gp)
+		fclose(gp);
 	usb_close(rfpower_handle);
 	usb_close(rfsynth_handle);
 
