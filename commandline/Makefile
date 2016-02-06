@@ -1,38 +1,29 @@
-# Concigure the following definitions according to your system.
-# This Makefile has been tested on Mac OS X, Linux and Windows.
-
-# Use the following 3 lines on Unix (uncomment the framework on Mac OS X):
 USBFLAGS = `libusb-config --cflags`
 USBLIBS = `libusb-config --libs`
-EXE_SUFFIX =
 
-# Use the following 3 lines on Windows and comment out the 3 above. You may
-# have to change the include paths to where you installed libusb-win32
-#USBFLAGS = -I/usr/local/include
-#USBLIBS = -L/usr/local/lib -lusb
-#EXE_SUFFIX = .exe
-
-NAME = rfsynth
+BIN = rfsynth
+LIB = librfsynth.a
 
 OBJECTS = opendevice.o main.o
+LIBOBJECTS = librfsynth.o
 
-CC		= gcc
+CC	= gcc
 CFLAGS	= $(CPPFLAGS) $(USBFLAGS) -O -g -Wall
 LIBS	= $(USBLIBS) -lm
 
-PROGRAM = $(NAME)$(EXE_SUFFIX)
-
-
-all: $(PROGRAM)
+all: $(BIN) $(LIB)
 
 .c.o:
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(PROGRAM): $(OBJECTS)
-	$(CC) -o $(PROGRAM) $(OBJECTS) $(LIBS)
+$(BIN): $(OBJECTS) $(LIB)
+	$(CC) -o $(BIN) $(OBJECTS) $(LIBS) $(LIB)
 
-strip: $(PROGRAM)
-	strip $(PROGRAM)
+$(LIB): $(LIBOBJECTS)
+	ar r $(LIB) $(LIBOBJECTS)
+
+strip: $(BIN)
+	strip $(BIN)
 
 clean:
-	rm -f *.o $(PROGRAM)
+	rm -f *.o $(BIN) $(LIB)
