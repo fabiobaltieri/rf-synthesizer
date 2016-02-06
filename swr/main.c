@@ -48,9 +48,6 @@ static void sweep(struct sample *samples, unsigned long long start, unsigned lon
 	unsigned int i;
 	float dbm;
 
-	printf("Sweep: %f MHz to %f MHz in %d steps\n",
-			to_mhz_f(start), to_mhz_f(stop), steps);
-
 	for (i = 0; i < steps; i++) {
 		freq = start + (stop - start) * i / steps;
 
@@ -60,7 +57,7 @@ static void sweep(struct sample *samples, unsigned long long start, unsigned lon
 		printf(", set");
 
 		do {
-			usleep(10000);
+			usleep(15000);
 			printf(", lock");
 		} while (!rfsynth_get_ld(rfsynth_handle));
 
@@ -77,10 +74,12 @@ static void sweep(struct sample *samples, unsigned long long start, unsigned lon
 	printf("\n");
 }
 
-static void dump(struct sample *samples, unsigned steps, char *fname)
+static void dump(struct sample *samples, struct sample *reference, unsigned steps, char *fname)
 {
 	FILE *fd;
 	unsigned int i;
+	float freq;
+	float power;
 
 	fd = fopen(fname, "w");
 	if (!fd) {
@@ -89,7 +88,11 @@ static void dump(struct sample *samples, unsigned steps, char *fname)
 	}
 
 	for (i = 0; i < steps; i++) {
-		fprintf(fd, "%f %f\n", samples[i].freq, samples[i].power);
+		freq = samples[i].freq;
+		power = samples[i].power;
+		if (reference)
+			power -= reference[i].power;
+		fprintf(fd, "%f %f\n", freq, power);
 	}
 
 	fclose(fd);
@@ -114,7 +117,7 @@ static void plot_init(FILE *gp)
 
 	fprintf(gp, "set title 'frequency vs power'\n");
 	fprintf(gp, "set xlabel 'frequency [Hz]'\n");
-	fprintf(gp, "set ylabel 'power [dBm]'\n");
+	fprintf(gp, "set ylabel 'power [dB]'\n");
 	fprintf(gp, "set format x '%%.0s%%c'\n");
 }
 
@@ -143,8 +146,10 @@ int main(int argc, char **argv)
 	char *outfile = "out.dat";
 	int plot = 0;
 	static FILE *gp = NULL;
+	int normalize = 0;
 
 	struct sample *samples;
+	struct sample *reference = NULL;
 
 	memset(&st, 0, sizeof(st));
 	memset(&cfg, 0, sizeof(cfg));
@@ -154,7 +159,7 @@ int main(int argc, char **argv)
 
 	usb_init();
 
-	while ((opt = getopt(argc, argv, "hvf:t:s:o:p")) != -1) {
+	while ((opt = getopt(argc, argv, "hvf:t:s:o:pn")) != -1) {
 		switch (opt) {
 		case 'h':
 			usage(argv[0]);
@@ -177,12 +182,17 @@ int main(int argc, char **argv)
 		case 'p':
 			plot = 1;
 			break;
+		case 'n':
+			normalize = 1;
+			break;
 		default:
 			usage(argv[0]);
 		}
 	}
 
 	samples = calloc(steps, sizeof(struct sample));
+	if (normalize)
+		reference = calloc(steps, sizeof(struct sample));
 
 	printf("Connecting to %s\n", RFSYNTH_PRODUCT);
 	if (usbOpenDevice(&rfsynth_handle, 0, NULL, 0, RFSYNTH_PRODUCT, NULL, NULL, NULL) != 0) {
@@ -206,10 +216,20 @@ int main(int argc, char **argv)
 	}
 	plot_init(gp);
 
+	printf("Sweep: %f MHz to %f MHz in %d steps\n",
+			to_mhz_f(from), to_mhz_f(to), steps);
+
+	if (normalize) {
+		printf("Normalizing...\n");
+		sweep(reference, from, to, steps);
+		dump(reference, NULL, steps, outfile);
+		plot_refresh(gp, outfile);
+	}
+
 	signal(SIGINT, bailout);
 	while (loop) {
 		sweep(samples, from, to, steps);
-		dump(samples, steps, outfile);
+		dump(samples, reference, steps, outfile);
 		plot_refresh(gp, outfile);
 	}
 
